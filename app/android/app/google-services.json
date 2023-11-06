@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "789469151553",
+    "project_id": "ideathonhowmuch",
+    "storage_bucket": "ideathonhowmuch.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:789469151553:android:fa6a8d668b5a5c1c54a1c0",
+        "android_client_info": {
+          "package_name": "llc.nestsolutions.howmuch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "789469151553-di6kba099a32p4rv39o2fihrj1atbvtu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "llc.nestsolutions.howmuch",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "789469151553-ts4juuc536dc861kctolhk7fauc6131q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGHnGFuOCFeIfkTyRlWWNxcIsvB0Q-J8Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "789469151553-ts4juuc536dc861kctolhk7fauc6131q.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "789469151553-r0q77mp1mh7rfndgihrlia1j7bsscjv2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.HowMuch"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
