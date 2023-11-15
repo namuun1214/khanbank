@@ -1,5 +1,5 @@
-import * as React from "react"
-import Svg, { Path } from "react-native-svg"
+import * as React from 'react'
+import Svg, { Path } from 'react-native-svg'
 
 const ProfileScreenIcon = (props) => (
   <Svg
@@ -28,7 +28,7 @@ export const EquallyIcon = (props) => (
   >
     <Path
       d="M23.75.5H1.25C.56.5 0 1.06 0 1.75v12.5c0 .69.56 1.25 1.25 1.25h22.5c.69 0 1.25-.56 1.25-1.25V1.75C25 1.06 24.44.5 23.75.5ZM1.875 13.625v-2.5a2.5 2.5 0 0 1 2.5 2.5h-2.5Zm0-8.75v-2.5h2.5a2.5 2.5 0 0 1-2.5 2.5ZM12.5 11.75c-1.726 0-3.125-1.68-3.125-3.75 0-2.071 1.4-3.75 3.125-3.75 1.726 0 3.125 1.679 3.125 3.75 0 2.072-1.4 3.75-3.125 3.75Zm10.625 1.875h-2.5a2.5 2.5 0 0 1 2.5-2.5v2.5Zm0-8.75a2.5 2.5 0 0 1-2.5-2.5h2.5v2.5Z"
-      fill="#98B5FF"
+      fill="#027A48"
     />
   </Svg>
 )

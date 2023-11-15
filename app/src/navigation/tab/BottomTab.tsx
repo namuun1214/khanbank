@@ -1,25 +1,25 @@
-import React, { FC } from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import React, { FC } from 'react'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import {
   NavigationRoutes,
   NavigatorParameterList,
-} from "../NavigationParameter";
-import { useTheme } from "../../providers";
-import { HomeScreen } from "../../screens/HomeScreen";
-import { CreateRoomScreen } from "../../screens/CreateRoomScreen";
-import { Pressable, Text } from "react-native";
-import { NotificationIcon } from "../../assets";
-import HomeScreenIcon from "../../assets/HomeScreenIcon";
-import CreateRoomIcon from "../../assets/CreateRoomIcon";
-import ProfileScreenIcon from "../../assets/ProfileScreenIcon";
-import { ProfileScreen } from "../../screens";
-import { useNavigation } from "@react-navigation/native";
+} from '../NavigationParameter'
+import { useTheme } from '../../providers'
+import { HomeScreen } from '../../screens/HomeScreen'
+import { CreateRoomScreen } from '../../screens/CreateRoomScreen'
+import { Pressable, Text } from 'react-native'
+import { NotificationIcon } from '../../assets'
+import HomeScreenIcon from '../../assets/HomeScreenIcon'
+import CreateRoomIcon from '../../assets/CreateRoomIcon'
+import ProfileScreenIcon from '../../assets/ProfileScreenIcon'
+import { ProfileScreen } from '../../screens'
+import { useNavigation } from '@react-navigation/native'
 
-const Tab = createBottomTabNavigator<NavigatorParameterList>();
+const Tab = createBottomTabNavigator<NavigatorParameterList>()
 
 export const BottomTabNavigator: FC = () => {
-  const { palette } = useTheme();
-  const navigation = useNavigation();
+  const { palette } = useTheme()
+  const navigation = useNavigation()
   return (
     <Tab.Navigator
       screenOptions={{
@@ -102,5 +102,5 @@ export const BottomTabNavigator: FC = () => {
         }}
       />
     </Tab.Navigator>
-  );
-};
+  )
+}

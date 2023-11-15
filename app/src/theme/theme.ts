@@ -21,9 +21,9 @@ export const theme: Theme = {
   baseSpace: 4,
   palette: {
     primary: {
-      main: "#98B5FF",
-      light: "#66737F",
-      dark: "#416BFF",
+      main: "#027A48",
+      light: "#06C755",
+      dark: "#000000",
       contrastText: "#fff",
     },
     background: {

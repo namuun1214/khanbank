@@ -1,96 +1,110 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
-import { useCollection, useCollectionUtils, useDocument, useDocumentUtils } from '../hooks';
-import { NavigationRoutes } from '../navigation/NavigationParameter';
-import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import { CloseIcon, RightArrowIcon } from "../assets";
-import { RadioIcon, SelectedRadioIcon, SplitIcon } from "../assets/SplitIcon";
-import { Center, Modal, Modal as NativeModal, Overlay } from "../components/core";
-import { Toggle } from "../components/Toggle";
-import { theme } from "../theme";
-import { SafeAreaScreen } from "./SafeAreaScreen";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
-import { useAuth } from "../authentication";
+import { useNavigation } from '@react-navigation/native'
+import React, { useState } from 'react'
+import {
+  useCollection,
+  useCollectionUtils,
+  useDocument,
+  useDocumentUtils,
+} from '../hooks'
+import { NavigationRoutes } from '../navigation/NavigationParameter'
+import { Dimensions, Pressable, StyleSheet, Text, View } from 'react-native'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
+import { CloseIcon, RightArrowIcon } from '../assets'
+import { RadioIcon, SelectedRadioIcon, SplitIcon } from '../assets/SplitIcon'
+import {
+  Center,
+  Modal,
+  Modal as NativeModal,
+  Overlay,
+} from '../components/core'
+import { Toggle } from '../components/Toggle'
+import { theme } from '../theme'
+import { SafeAreaScreen } from './SafeAreaScreen'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
+import { useAuth } from '../authentication'
 type notEqualItemType = {
-  name: string;
-  price: number;
-  quantity: number;
-  index: number;
-  showSplit: (index: number) => void;
-};
-const width = Dimensions.get("window").width;
-const height = Dimensions.get("window").height;
+  name: string
+  price: number
+  quantity: number
+  index: number
+  showSplit: (index: number) => void
+}
+const width = Dimensions.get('window').width
+const height = Dimensions.get('window').height
 export const SplitOptionScreen = ({ route }: any): JSX.Element => {
   // const { data, loading } = useCollection({ path: "users" });
-  const total = route.params.total;
-  const roomId = route.params.roomId;
+  const total = route.params.total
+  const roomId = route.params.roomId
   const { data, loading } = useDocument({ path: `rooms/${roomId}` })
   const [isVisibleModal, setVisibleModal] = useState(false)
-  const { createDocument } = useCollectionUtils({ path: 'notifications' });
+  const { createDocument } = useCollectionUtils({ path: 'notifications' })
   const { updateDocument } = useDocumentUtils({ path: `rooms/${roomId}` })
-  const selfTotal = parseInt(total / data?.users?.length);
-  const { navigate } = useNavigation();
-  const [splitOption, setSplitOption] = useState('equally');
+  const selfTotal = parseInt(total / data?.users?.length)
+  const { navigate } = useNavigation()
+  const [splitOption, setSplitOption] = useState('equally')
   const sendNotif = async (data: any) => {
-    const usersData = data?.users;
+    const usersData = data?.users
     const newData = usersData.map((user) => {
       return { ...user, fee: selfTotal, isPaid: false }
     })
     try {
-      await updateDocument({ users: newData, isCalculated: true, splitOption: splitOption, total: total });
+      await updateDocument({
+        users: newData,
+        isCalculated: true,
+        splitOption: splitOption,
+        total: total,
+      })
       data.users.map(async (user: any) => {
-
         await createDocument({
-          title: "Нэхэмжлэл",
+          title: 'Нэхэмжлэл',
           description: `Танд ${data?.adminUser?.phoneNumber} дугаартай хэрэглэгчээс ${selfTotal}₮ нэхэмжлэв.`,
-          target: "phone",
+          target: 'phone',
           targetValue: user.phoneNumber,
-        });
-      });
-      console.log("done.");
+        })
+      })
+      console.log('done.')
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
-  };
-  const [showSplitModal, setShowSplitModal] = useState(false);
-  const [splitModalItemIndex, setSplitModalItemIndex] = useState(0);
-  const [splitModalInput, setSplitModalInput] = useState("");
+  }
+  const [showSplitModal, setShowSplitModal] = useState(false)
+  const [splitModalItemIndex, setSplitModalItemIndex] = useState(0)
+  const [splitModalInput, setSplitModalInput] = useState('')
   const showSplit = (index: number) => {
-    console.log("showSplit");
-    setSplitModalItemIndex(index);
-    setShowSplitModal(true);
-  };
+    console.log('showSplit')
+    setSplitModalItemIndex(index)
+    setShowSplitModal(true)
+  }
   const mockData = [
     {
-      name: "Банан",
+      name: 'Банан',
       price: 8000,
       quantity: 10,
     },
     {
-      name: "Алим",
+      name: 'Алим',
       price: 8000,
       quantity: 10,
     },
-  ];
+  ]
   if (loading) {
-    return <Text>Loading ...</Text>;
+    return <Text>Loading ...</Text>
   }
   return (
     <View
       style={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        justifyContent: "flex-end",
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        justifyContent: 'flex-end',
       }}
     >
       <NativeModal
         transparent
         visible={showSplitModal}
         onRequestClose={() => {
-          setShowSplitModal(false);
+          setShowSplitModal(false)
         }}
       >
         <View
@@ -98,10 +112,10 @@ export const SplitOptionScreen = ({ route }: any): JSX.Element => {
             styles.center,
             {
               flex: 1,
-              backgroundColor: "rgba(255,255,255,0.5)",
+              backgroundColor: 'rgba(255,255,255,0.5)',
               padding: 16,
               top: 0,
-              position: "absolute",
+              position: 'absolute',
               width: width,
               height: height,
             },
@@ -112,7 +126,7 @@ export const SplitOptionScreen = ({ route }: any): JSX.Element => {
               style={[
                 styles.textCenter,
                 {
-                  fontWeight: "600",
+                  fontWeight: '600',
                   fontSize: 18,
                 },
               ]}
@@ -120,7 +134,7 @@ export const SplitOptionScreen = ({ route }: any): JSX.Element => {
               {mockData[splitModalItemIndex].name}
             </Text>
             <Text style={[styles.textCenter, styles.splitModalDesription]}>
-              Тухайн барааг хувааж төлөх{"\n"} найзуудынхаа тоог оруулна уу.
+              Тухайн барааг хувааж төлөх{'\n'} найзуудынхаа тоог оруулна уу.
             </Text>
             <TextInput
               keyboardType="number-pad"
@@ -130,86 +144,86 @@ export const SplitOptionScreen = ({ route }: any): JSX.Element => {
             />
             <Pressable
               onPress={() => {
-                setShowSplitModal(false);
-                setSplitModalInput("");
+                setShowSplitModal(false)
+                setSplitModalInput('')
               }}
               style={{
-                position: "absolute",
+                position: 'absolute',
                 top: 20,
                 right: 20,
               }}
             >
-              <CloseIcon color="#98B5FF" />
+              <CloseIcon color="#027A48" />
             </Pressable>
           </View>
         </View>
       </NativeModal>
-      <View style={{ width: "100%", height: "100%" }}>
+      <View style={{ width: '100%', height: '100%' }}>
         <Toggle
           tabOneComponent={
             <View
-              style={{ width: "100%", height: "100%", flexDirection: "column" }}
+              style={{ width: '100%', height: '100%', flexDirection: 'column' }}
             >
               <View
                 style={{
-                  justifyContent: "center",
-                  width: "100%",
-                  height: "100%",
+                  justifyContent: 'center',
+                  width: '100%',
+                  height: '100%',
                 }}
               >
                 {data &&
                   data?.users?.map((user) => (
                     <View
                       style={{
-                        width: "100%",
-                        borderBottomColor: "#D5DDE5",
+                        width: '100%',
+                        borderBottomColor: '#D5DDE5',
                         borderBottomWidth: 1,
-                        justifyContent: "space-between",
-                        flexDirection: "row",
-                        alignItems: "center",
+                        justifyContent: 'space-between',
+                        flexDirection: 'row',
+                        alignItems: 'center',
                         padding: 5,
                       }}
                     >
                       <View
-                        style={{ flexDirection: "row", alignItems: "center" }}
+                        style={{ flexDirection: 'row', alignItems: 'center' }}
                       >
                         <View
                           style={{
                             width: 50,
                             height: 50,
                             borderRadius: 50,
-                            borderColor: "#98B5FF",
+                            borderColor: '#027A48',
                             borderWidth: 2,
-                            justifyContent: "center",
+                            justifyContent: 'center',
                           }}
                         >
                           <Text
                             style={{
-                              fontWeight: "bold",
-                              color: "#98B5FF",
+                              fontWeight: 'bold',
+                              color: '#027A48',
                               fontSize: 30,
-                              textAlign: "center",
+                              textAlign: 'center',
                             }}
                           >
                             {user?.name
-                              ? user?.name.split("")[0].toUpperCase()
-                              : "A"}
+                              ? user?.name.split('')[0].toUpperCase()
+                              : 'A'}
                           </Text>
                         </View>
                         <View
                           style={{
                             height: 45,
-                            justifyContent: "space-between",
+                            justifyContent: 'space-between',
                             marginLeft: 10,
                           }}
                         >
-                          <Text style={{ fontWeight: "bold" }}>
+                          <Text style={{ fontWeight: 'bold' }}>
                             {user?.name}
                           </Text>
                           <Text>{user.phoneNumber}</Text>
                         </View>
                       </View>
-                      <Text style={{ color: "#98B5FF", fontWeight: "bold" }}>
+                      <Text style={{ color: '#027A48', fontWeight: 'bold' }}>
                         {selfTotal}₮
                       </Text>
                     </View>
@@ -225,20 +239,20 @@ export const SplitOptionScreen = ({ route }: any): JSX.Element => {
         />
         <View
           style={{
-            width: "100%",
-            height: "20%",
-            borderColor: "#D5DDE5",
+            width: '100%',
+            height: '20%',
+            borderColor: '#D5DDE5',
             borderWidth: 1,
             padding: 20,
-            flexDirection: "row",
-            justifyContent: "space-between",
+            flexDirection: 'row',
+            justifyContent: 'space-between',
           }}
         >
           <View>
-            <Text style={{ fontWeight: "bold", fontSize: 16, marginBottom: 5 }}>
+            <Text style={{ fontWeight: 'bold', fontSize: 16, marginBottom: 5 }}>
               Нийт: {total}₮
             </Text>
-            <Text style={{ color: "#98B5FF", fontSize: 16 }}>
+            <Text style={{ color: '#027A48', fontSize: 16 }}>
               Биелэлт: 0/100%
             </Text>
           </View>
@@ -248,9 +262,9 @@ export const SplitOptionScreen = ({ route }: any): JSX.Element => {
               width: 40,
               height: 40,
               borderRadius: 10,
-              backgroundColor: "#98B5FF",
-              justifyContent: "center",
-              alignItems: "center",
+              backgroundColor: '#027A48',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
           >
             <RightArrowIcon />
@@ -258,18 +272,23 @@ export const SplitOptionScreen = ({ route }: any): JSX.Element => {
         </View>
       </View>
       <Modal
-        color={"#98B5FF"}
+        color={'#027A48'}
         rightButtonText="Үгүй"
         leftButtonText="Тийм"
         title="Та баримтыг багийн гишүүд рүү илгээхдээ итгэлтэй байна уу?"
         setIsVisible={setVisibleModal}
         isVisible={isVisibleModal}
         onLeftButton={() => setVisibleModal(false)}
-        onRightButton={async () => { await setSplitOption('equally'); sendNotif(data); setVisibleModal(false); navigate(NavigationRoutes.HomeScreen) }}
+        onRightButton={async () => {
+          await setSplitOption('equally')
+          sendNotif(data)
+          setVisibleModal(false)
+          navigate(NavigationRoutes.HomeScreen)
+        }}
       />
     </View>
-  );
-};
+  )
+}
 const NotEqualContainer = ({ showSplit, data }: any): JSX.Element => {
   return (
     <>
@@ -283,8 +302,8 @@ const NotEqualContainer = ({ showSplit, data }: any): JSX.Element => {
         />
       ))}
     </>
-  );
-};
+  )
+}
 const NotEqualItem = ({
   name,
   price,
@@ -292,15 +311,15 @@ const NotEqualItem = ({
   index,
   showSplit,
 }: notEqualItemType): JSX.Element => {
-  const [isEnabled, setIsEnabled] = useState(false);
-  const [piece, setPiece] = useState(0);
+  const [isEnabled, setIsEnabled] = useState(false)
+  const [piece, setPiece] = useState(0)
   return (
     <View
       style={[
         styles.row,
         styles.justifyBetween,
         {
-          width: "100%",
+          width: '100%',
           marginVertical: 10,
         },
       ]}
@@ -309,7 +328,7 @@ const NotEqualItem = ({
         {isEnabled ? <SelectedRadioIcon /> : <RadioIcon />}
       </Pressable>
       <View style={styles.col}>
-        <Text style={{ fontWeight: "bold" }}>{name}</Text>
+        <Text style={{ fontWeight: 'bold' }}>{name}</Text>
         <Text style={styles.piece}>{quantity} ширхэг</Text>
       </View>
       <View>
@@ -337,28 +356,28 @@ const NotEqualItem = ({
           }}
           onPress={() => {
             //Show Split Icon
-            showSplit(index);
+            showSplit(index)
           }}
         >
           <SplitIcon />
         </Pressable>
       </View>
     </View>
-  );
-};
+  )
+}
 const styles = StyleSheet.create({
   center: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   row: {
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   col: {
-    flexDirection: "column",
+    flexDirection: 'column',
   },
   justifyBetween: {
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   plusQuantity: {
     width: 35,
@@ -368,9 +387,9 @@ const styles = StyleSheet.create({
   },
   plusText: {
     color: theme.palette.tertiary,
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: 20,
-    fontWeight: "400",
+    fontWeight: '400',
     // lineHeight: 24,
   },
   quantityTextContainer: {
@@ -389,23 +408,23 @@ const styles = StyleSheet.create({
   },
   splitModalContainer: {
     padding: 25,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 25,
-    width: "100%",
-    justifyContent: "space-between",
+    width: '100%',
+    justifyContent: 'space-between',
   },
   textCenter: {
-    textAlign: "center",
+    textAlign: 'center',
   },
   splitModalInput: {
     padding: 20,
     fontSize: 18,
-    color: "#141414",
+    color: '#141414',
     borderWidth: 1,
-    borderColor: "#98B5FF",
+    borderColor: '#027A48',
     borderRadius: 40,
   },
   splitModalDesription: {
     marginVertical: 20,
   },
-});
+})

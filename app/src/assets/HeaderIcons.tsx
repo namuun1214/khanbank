@@ -1,14 +1,14 @@
-import * as React from "react";
-import Svg, { Path } from "react-native-svg";
+import * as React from 'react'
+import Svg, { Path } from 'react-native-svg'
 
 type Props = {
-  width?: number | string;
-  height?: number | string;
-  color?: string;
-};
+  width?: number | string
+  height?: number | string
+  color?: string
+}
 
 export const HeaderBack = (props: Props): JSX.Element => {
-  const { color = "white", width = 25, height = 25 } = props;
+  const { color = 'white', width = 25, height = 25 } = props
   return (
     <Svg
       width={width}
@@ -22,10 +22,10 @@ export const HeaderBack = (props: Props): JSX.Element => {
         fill={color}
       />
     </Svg>
-  );
-};
+  )
+}
 export const HeaderCorrectIcon = (props: Props): JSX.Element => {
-  const { color = "#98B5FF", width = 24, height = 24 } = props;
+  const { color = '#027A48', width = 24, height = 24 } = props
   return (
     <Svg width={width} height={height} viewBox="0 0 24 24" fill="none">
       <Path
@@ -33,10 +33,10 @@ export const HeaderCorrectIcon = (props: Props): JSX.Element => {
         fill={color}
       />
     </Svg>
-  );
-};
+  )
+}
 export const ChevronLeft = (props: Props): JSX.Element => {
-  const { color = "#98B5FF", width = 24, height = 24 } = props;
+  const { color = '#027A48', width = 24, height = 24 } = props
   return (
     <Svg width={width} height={height} viewBox="0 0 24 24" fill="none">
       <Path
@@ -44,5 +44,5 @@ export const ChevronLeft = (props: Props): JSX.Element => {
         fill={color}
       />
     </Svg>
-  );
-};
+  )
+}
