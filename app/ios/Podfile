@@ -9,7 +9,8 @@ target 'HowMuch' do
 
   # Permission path 
   permissions_path = '../node_modules/react-native-permissions/ios'
-
+  pod 'FirebaseAuth'
+  pod 'FirebaseFirestore'
   pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary"
   pod 'Permission-PhotoLibraryAddOnly', :path => "#{permissions_path}/PhotoLibraryAddOnly"
   pod 'Permission-Camera', :path => "#{permissions_path}/Camera"

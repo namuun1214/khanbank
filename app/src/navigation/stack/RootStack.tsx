@@ -1,24 +1,25 @@
-import React, { FC } from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { BottomTabNavigator } from "../tab";
+import React, { FC } from 'react'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { BottomTabNavigator } from '../tab'
 import {
   NavigationRoutes,
   NavigatorParameterList,
-} from "../NavigationParameter";
-import { useNavigation } from "@react-navigation/native";
-import { Pressable } from "react-native";
-import { ChevronLeft, HeaderBack, NotificationIcon } from "../../assets";
-import { RoomDetails } from "../../screens/RoomDetail";
-import { theme } from "../../theme";
-import { BillScreen, SplitOptionScreen } from "../../screens";
-import { ScanBillScreen } from "../../screens/ScanBillScreen";
-import { NotificationScreen } from "../../screens/NotificationScreen";
+} from '../NavigationParameter'
+import { useNavigation } from '@react-navigation/native'
+import { Pressable } from 'react-native'
+import { ChevronLeft, HeaderBack, NotificationIcon } from '../../assets'
+import { RoomDetails } from '../../screens/RoomDetail'
+import { theme } from '../../theme'
+import { BillScreen, SplitOptionScreen } from '../../screens'
+import { ScanBillScreen } from '../../screens/ScanBillScreen'
+import ShakeScreen from '../../screens/ShakeScreen'
+import { NotificationScreen } from '../../screens/NotificationScreen'
 
-const Stack = createNativeStackNavigator<NavigatorParameterList>();
+const Stack = createNativeStackNavigator<NavigatorParameterList>()
 
 export const RootStack: FC = () => {
-  const { palette } = theme;
-  const navigation = useNavigation();
+  const { palette } = theme
+  const navigation = useNavigation()
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -37,7 +38,7 @@ export const RootStack: FC = () => {
           headerLeft: () => (
             <Pressable
               onPress={() => {
-                navigation.goBack();
+                navigation.goBack()
               }}
               style={{ marginLeft: 10 }}
             >
@@ -67,7 +68,37 @@ export const RootStack: FC = () => {
           headerLeft: () => (
             <Pressable
               onPress={() => {
-                navigation.goBack();
+                navigation.goBack()
+              }}
+              style={{ marginLeft: 10 }}
+            >
+              <HeaderBack />
+            </Pressable>
+          ),
+          headerRight: () => (
+            <Pressable
+              onPress={() =>
+                navigation.navigate(NavigationRoutes.NotificationScreen)
+              }
+              style={{ marginRight: 10 }}
+            >
+              <NotificationIcon />
+            </Pressable>
+          ),
+        }}
+      />
+      <Stack.Screen
+        name={NavigationRoutes.ShakeScreen}
+        component={ShakeScreen}
+        options={{
+          headerStyle: {
+            backgroundColor: palette.primary.main,
+          },
+          headerTintColor: palette.primary.contrastText,
+          headerLeft: () => (
+            <Pressable
+              onPress={() => {
+                navigation.goBack()
               }}
               style={{ marginLeft: 10 }}
             >
@@ -97,7 +128,7 @@ export const RootStack: FC = () => {
           headerLeft: () => (
             <Pressable
               onPress={() => {
-                navigation.goBack();
+                navigation.goBack()
               }}
               style={{ marginLeft: 10 }}
             >
@@ -124,7 +155,7 @@ export const RootStack: FC = () => {
           headerLeft: () => (
             <Pressable
               onPress={() => {
-                navigation.goBack();
+                navigation.goBack()
               }}
               style={{ marginLeft: 10 }}
             >
@@ -151,7 +182,7 @@ export const RootStack: FC = () => {
           headerLeft: () => (
             <Pressable
               onPress={() => {
-                navigation.goBack();
+                navigation.goBack()
               }}
               style={{ marginLeft: 10 }}
             >
@@ -161,5 +192,5 @@ export const RootStack: FC = () => {
         }}
       />
     </Stack.Navigator>
-  );
-};
+  )
+}

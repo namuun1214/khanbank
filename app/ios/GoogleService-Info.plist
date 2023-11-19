@@ -2,10 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CLIENT_ID</key>
-	<string>789469151553-5ojh9gmlqbh1hfuho9vbbpmoaljbm6me.apps.googleusercontent.com</string>
-	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.789469151553-5ojh9gmlqbh1hfuho9vbbpmoaljbm6me</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>789469151553-09vlnmcshhn5klgf3fsjqi087l2eegrb.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,7 +11,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>llc.nestSolutions.howmuch</string>
+	<string>com.khanbankhackathon.howmuch</string>
 	<key>PROJECT_ID</key>
 	<string>ideathonhowmuch</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,6 +27,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:789469151553:ios:b7f3b8339375088f54a1c0</string>
+	<string>1:789469151553:ios:35ba28018d9aa27254a1c0</string>
 </dict>
 </plist>

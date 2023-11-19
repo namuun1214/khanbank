@@ -12,9 +12,9 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		650E54AD2B0A28250083C291 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 650E54AC2B0A28250083C291 /* GoogleService-Info.plist */; };
 		7699B88040F8A987B510C191 /* libPods-HowMuch-HowMuchTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-HowMuch-HowMuchTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		F85C127F286C351800AECE9D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F85C127E286C351800AECE9D /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,11 +42,11 @@
 		5709B34CF0A7D63546082F79 /* Pods-HowMuch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HowMuch.release.xcconfig"; path = "Target Support Files/Pods-HowMuch/Pods-HowMuch.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-HowMuch-HowMuchTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HowMuch-HowMuchTests.debug.xcconfig"; path = "Target Support Files/Pods-HowMuch-HowMuchTests/Pods-HowMuch-HowMuchTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-HowMuch.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-HowMuch.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		650E54AC2B0A28250083C291 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = HowMuch/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-HowMuch-HowMuchTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HowMuch-HowMuchTests.release.xcconfig"; path = "Target Support Files/Pods-HowMuch-HowMuchTests/Pods-HowMuch-HowMuchTests.release.xcconfig"; sourceTree = "<group>"; };
 		E6D13E9E27FA7E7900D111DE /* HowMuch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = HowMuch.entitlements; path = HowMuch/HowMuch.entitlements; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		F85C127E286C351800AECE9D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,7 +89,7 @@
 		13B07FAE1A68108700A75B9A /* HowMuch */ = {
 			isa = PBXGroup;
 			children = (
-				F85C127E286C351800AECE9D /* GoogleService-Info.plist */,
+				650E54AC2B0A28250083C291 /* GoogleService-Info.plist */,
 				E6D13E9E27FA7E7900D111DE /* HowMuch.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
@@ -249,8 +249,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
-				F85C127F286C351800AECE9D /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				650E54AD2B0A28250083C291 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -507,9 +507,11 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = HowMuch/HowMuch.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2S3W72BY4K;
+				DEVELOPMENT_TEAM = UBW6ZSKZ3T;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = HowMuch/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = HowMuch;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -520,7 +522,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = llc.nestSolutions.howmuch;
+				PRODUCT_BUNDLE_IDENTIFIER = com.khanbankhackathon.howmuch;
 				PRODUCT_NAME = HowMuch;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -536,8 +538,10 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = HowMuch/HowMuch.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2S3W72BY4K;
+				DEVELOPMENT_TEAM = UBW6ZSKZ3T;
 				INFOPLIST_FILE = HowMuch/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = HowMuch;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -548,7 +552,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = llc.nestSolutions.howmuch;
+				PRODUCT_BUNDLE_IDENTIFIER = com.khanbankhackathon.howmuch;
 				PRODUCT_NAME = HowMuch;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
