@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import {
   Dimensions,
   Pressable,
@@ -41,7 +41,12 @@ export const RoomDetails = ({ route, navigation }): ReactElement => {
   const { updateDocument } = useDocumentUtils({ path: `rooms/${roomId}` })
   const { navigate } = useNavigation()
   const [isClosed, setClosed] = useState(false)
-
+  // const [isOwnPaid, setOwnPaid] = useState(false)
+  // useEffect(() => {
+  //   // const userIndex = data?.users?.findIndex((el) => el.id === uid)
+  //   console.log('hoho')
+  //   // console.log(userIndex)
+  // }, [])
   const { data: adminData, loading } = useDocument({
     path: `users/${data?.adminUser}`,
   })
@@ -61,9 +66,7 @@ export const RoomDetails = ({ route, navigation }): ReactElement => {
     }
   })
   const [inputValue, setInputValue] = useState(myFee)
-  const handleNumberChange = (value: string) => {
-    setInputValue(value)
-  }
+
   const calculateResult = () => {
     const paidUsers = data?.users?.filter((user) => {
       return user.isPaid
@@ -75,6 +78,7 @@ export const RoomDetails = ({ route, navigation }): ReactElement => {
     await updateDocument({ isActive: !data?.isActive })
     setClosed(true)
   }
+
   const pay = async () => {
     const userIndex = data.users.findIndex((el) => el.id === uid)
     const newUsers = data.users
@@ -207,36 +211,27 @@ export const RoomDetails = ({ route, navigation }): ReactElement => {
                               alignItems: 'center',
                             }}
                           >
-                            <Text style={{ color: 'white' }}>Хуримтлал</Text>
+                            <Text style={{ color: 'white' }}>Төлөх</Text>
                           </Pressable>
                         </View>
                       )}
-                      <Queue
+                      <Stack
                         alignItems="center"
                         justifyContent="center"
                         width="100%"
-                        role={palette.secondary}
-                        padding={8}
                       >
-                        <Input
-                          autoCapitalize="none"
-                          placeholder="Төлөх дүн"
-                          width="80%"
-                          role={palette.background.default}
-                          keyboardType="number-pad"
-                          onChangeText={handleNumberChange}
-                          value={inputValue}
-                          inputStyle={{
-                            fontSize: 25,
-                            fontWeight: '700',
-                            textAlign: 'right',
+                        <View
+                          style={{
+                            width: '100%',
+                            borderColor: 'red',
+                            borderWidth: 2,
+                            borderRadius: 5,
+                            padding: 5,
                           }}
-                          defaultValue={'0'}
-                        />
-                        <Pressable onPress={() => setVisibleModal(true)}>
-                          <AddIcon color="white" />
-                        </Pressable>
-                      </Queue>
+                        >
+                          <Text>Холбосон данснууд</Text>
+                        </View>
+                      </Stack>
                       <View style={{ width: '100%' }}>
                         {users.map((element, index) => {
                           return (
@@ -301,28 +296,34 @@ export const RoomDetails = ({ route, navigation }): ReactElement => {
                       textAlign: 'center',
                     }}
                   >
-                    Та илүү төлөх гэж байна. Энэ нь хуримтлалруу орно.
+                    Төлбөр амжилттай төлөгдлөө
                   </Text>
-                  <TouchableOpacity onPress={() => copyToClipboard()}>
+                  {/* <TouchableOpacity onPress={() => copyToClipboard()}>
                     <Text>Хуримтлал: {adminData?.bankName}</Text>
                   </TouchableOpacity>
                   <Text>Дансны дугаар: {adminData?.accountNumber}</Text>
-                  <Text>Эзэмшигч: {adminData?.owner}</Text>
-                  <Queue size={15}>
-                    <View style={{ width: 120 }}>
-                      <Button
-                        type="secondary"
-                        onPress={() => void setVisibleModal(false)}
-                      >
-                        Буцах
-                      </Button>
-                    </View>
+                  <Text>Эзэмшигч: {adminData?.owner}</Text> */}
+                  {/* <Queue size={15}>
+                    <View style={{ width: 120 }}> */}
+                  <View style={{ width: 120 }}>
+                    <Button
+                      type="primary"
+                      onPress={() => {
+                        void pay()
+                        setVisibleModal(false)
+                        navigate(NavigationRoutes.HomeScreen)
+                      }}
+                    >
+                      OK
+                    </Button>
+                  </View>
+                  {/* </View>
                     <View style={{ width: 120 }}>
                       <Button type="primary" onPress={() => void pay()}>
                         Тэгье
                       </Button>
                     </View>
-                  </Queue>
+                  </Queue> */}
                 </Stack>
               </View>
             )}

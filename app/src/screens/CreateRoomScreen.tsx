@@ -159,30 +159,48 @@ export const CreateRoomScreen = (): JSX.Element => {
               </Pressable>
             </Queue>
             <Spacer horizontal size={5} />
-            <View
-              style={{
-                backgroundColor: palette.primary.light,
-                width: '100%',
-                height: 100,
-                padding: 20,
+            <Pressable
+              onPress={() => {
+                navigate(NavigationRoutes.ShakeScreen)
               }}
             >
-              <Queue justifyContent="space-between">
-                <Stack alignItems="flex-start" justifyContent="center" size={3}>
-                  <Text
-                    style={{ color: 'white', fontSize: 16, fontWeight: '600' }}
+              <View
+                style={{
+                  backgroundColor: palette.primary.light,
+                  width: '100%',
+                  height: 100,
+                  padding: 20,
+                }}
+              >
+                <Queue justifyContent="space-between">
+                  <Stack
+                    alignItems="flex-start"
+                    justifyContent="center"
+                    size={3}
                   >
-                    Сэгсрэх
-                  </Text>
-                  <Text
-                    style={{ color: 'white', fontSize: 16, fontWeight: '500' }}
-                  >
-                    Утсаа сэгсрээд төлбөрөө төл
-                  </Text>
-                </Stack>
-                <ShakeIcon />
-              </Queue>
-            </View>
+                    <Text
+                      style={{
+                        color: 'white',
+                        fontSize: 16,
+                        fontWeight: '600',
+                      }}
+                    >
+                      Сэгсрэх
+                    </Text>
+                    <Text
+                      style={{
+                        color: 'white',
+                        fontSize: 16,
+                        fontWeight: '500',
+                      }}
+                    >
+                      Утсаа сэгсрээд төлбөрөө төл
+                    </Text>
+                  </Stack>
+                  <ShakeIcon />
+                </Queue>
+              </View>
+            </Pressable>
             <View style={styles.selectedMembers}>
               {activeRoomMembers?.map((member, index) => {
                 return (
