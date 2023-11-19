@@ -1,25 +1,24 @@
-import _ from "lodash";
-import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { useDocument, useDocumentUtils } from "../hooks";
-import { useUserData } from "../providers/UserProvider";
-import { theme } from "../theme";
-import { Spacer } from "./core";
+import _ from 'lodash'
+import React, { useEffect, useState } from 'react'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { useDocument, useDocumentUtils } from '../hooks'
+import { useUserData } from '../providers/UserProvider'
+import { theme } from '../theme'
+import { Spacer } from './core'
 import firestore, {
   FirebaseFirestoreTypes,
-} from "@react-native-firebase/firestore";
-import { useUserUID } from "../authentication";
+} from '@react-native-firebase/firestore'
+import { useUserUID } from '../authentication'
 const Contact = ({ contact, roomDetail, roomId, readOnly }) => {
-  const isRoom = roomDetail?.length == 0 || roomDetail;
-  const uid = useUserUID();
-  const { setActiveRoomMembers, activeRoomMembers, userData } = useUserData();
-  const { data: roomData } = useDocument({ path: `rooms/${roomId}` });
+  const isRoom = roomDetail?.length == 0 || roomDetail
+  const uid = useUserUID()
+  const { setActiveRoomMembers, activeRoomMembers, userData } = useUserData()
+  const { data: roomData } = useDocument({ path: `rooms/${roomId}` })
 
-  const [isChecked, setChecked] = useState(roomDetail?.isPaid);
+  const [isChecked, setChecked] = useState(roomDetail?.isPaid)
 
-  const allUsers = roomData?.users;
+  const allUsers = roomData?.users
   useEffect(() => {
-
     const newUsers = allUsers?.map((user) => {
       if (user.id === roomDetail.id) {
         return { ...user, isPaid: isChecked }
@@ -27,26 +26,30 @@ const Contact = ({ contact, roomDetail, roomId, readOnly }) => {
       return user
     })
     if (newUsers)
-      firestore()
-        .doc(`rooms/${roomId}`)
-        .set(
-          { updatedAt: firestore.FieldValue.serverTimestamp(), users: newUsers },
-          { merge: true }
-        );
+      firestore().doc(`rooms/${roomId}`).set(
+        {
+          updatedAt: firestore.FieldValue.serverTimestamp(),
+          users: newUsers,
+        },
+        { merge: true },
+      )
   }, [isChecked])
 
   useEffect(() => {
-    activeRoomMembers.length === 0 && setActiveRoomMembers([userData.phoneNumber])
+    activeRoomMembers.length === 0 &&
+      setActiveRoomMembers([
+        { phoneNumber: userData.phoneNumber, nickName: userData.nickName },
+      ])
   }, [activeRoomMembers])
 
   const handlePressNumber = () => {
-
+    console.log('number', contact?.phoneNumbers[0]?.number)
     setActiveRoomMembers((prev) => {
       return _.includes(prev, contact?.phoneNumbers[0]?.number)
         ? [...prev]
-        : [...prev, contact?.phoneNumbers[0]?.number];
-    });
-  };
+        : [...prev, contact?.phoneNumbers[0]?.number]
+    })
+  }
   return (
     <TouchableOpacity
       onPress={() => (!isRoom ? handlePressNumber() : setChecked(!isChecked))}
@@ -55,15 +58,16 @@ const Contact = ({ contact, roomDetail, roomId, readOnly }) => {
         <View style={styles.imgCon}>
           <View style={styles.placeholder}>
             <Text style={styles.txt}>
-              {isRoom ? "U" : contact?.givenName[0]}
+              {isRoom ? 'U' : contact?.givenName[0]}
             </Text>
           </View>
         </View>
 
         <View style={styles.contactDat}>
           <Text style={styles.name}>
-            {contact?.givenName}{roomDetail?.nickNames}
-            {contact?.middleName && contact.middleName + " "}
+            {contact?.givenName}
+            {roomDetail?.nickName}
+            {contact?.middleName && contact.middleName + ' '}
             {contact?.familyName}
           </Text>
           <Text style={styles.phoneNumber}>
@@ -72,17 +76,27 @@ const Contact = ({ contact, roomDetail, roomId, readOnly }) => {
               : contact?.phoneNumbers[0]?.number}
           </Text>
         </View>
-        {!readOnly && <View style={styles.feeSection}>
-          {roomDetail?.fee && roomData?.adminUser === uid &&
-            <Text style={{ fontSize: 14, color: theme.palette.primary.main, fontWeight: '600' }}>{roomDetail.fee}₮   </Text>
-          }
+        {!readOnly && (
+          <View style={styles.feeSection}>
+            {roomDetail?.fee && roomData?.adminUser === uid && (
+              <Text
+                style={{
+                  fontSize: 14,
+                  color: theme.palette.primary.main,
+                  fontWeight: '600',
+                }}
+              >
+                {roomDetail.fee}₮{' '}
+              </Text>
+            )}
 
-          <View style={isChecked ? styles.checked : styles.checkbox} />
-        </View>}
+            <View style={isChecked ? styles.checked : styles.checkbox} />
+          </View>
+        )}
       </View>
     </TouchableOpacity>
-  );
-};
+  )
+}
 const styles = StyleSheet.create({
   checked: {
     width: 16,
@@ -97,7 +111,7 @@ const styles = StyleSheet.create({
     height: 16,
     borderRadius: 8,
     borderColor: theme.palette.primary.main,
-    borderWidth: 1
+    borderWidth: 1,
   },
   feeSection: {
     display: 'flex',
@@ -107,24 +121,24 @@ const styles = StyleSheet.create({
   },
   contactCon: {
     flex: 1,
-    flexDirection: "row",
+    flexDirection: 'row',
     padding: 5,
     borderBottomWidth: 0.5,
-    borderBottomColor: "#d9d9d9",
+    borderBottomColor: '#d9d9d9',
   },
   imgCon: {},
   placeholder: {
     width: 55,
     height: 55,
     borderRadius: 30,
-    overflow: "hidden",
-    backgroundColor: "#d9d9d9",
-    alignItems: "center",
-    justifyContent: "center",
+    overflow: 'hidden',
+    backgroundColor: '#d9d9d9',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   contactDat: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: 'center',
     paddingLeft: 5,
   },
   txt: {
@@ -134,7 +148,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   phoneNumber: {
-    color: "#888",
+    color: '#888',
   },
-});
-export default Contact;
+})
+export default Contact

@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
   Clipboard,
+  KeyboardAvoidingView,
 } from 'react-native'
 import _ from 'lodash'
 import Contact from '../components/Contact'
@@ -19,9 +20,15 @@ import { useUserUID } from '../authentication'
 import { useDocument, useDocumentUtils } from '../hooks'
 import { SafeAreaScreen } from '.'
 import { Toggle } from '../components/Toggle'
-import { EquallyIcon, RightArrowIcon } from '../assets'
+import { AddIcon, EquallyIcon, RightArrowIcon } from '../assets'
 import { theme } from '../theme'
 import Button from '../components/Button'
+import { Input } from '../components/Input'
+import { useTheme } from '../providers'
+import { ScrollView, TextInput } from 'react-native-gesture-handler'
+import firestore, {
+  FirebaseFirestoreTypes,
+} from '@react-native-firebase/firestore'
 
 export const RoomDetails = ({ route, navigation }): ReactElement => {
   const { roomId, roomName, users, isActive } = route.params
@@ -29,10 +36,12 @@ export const RoomDetails = ({ route, navigation }): ReactElement => {
   const windowWidth = Dimensions.get('window').width
   const [isVisibleModal, setVisibleModal] = useState(false)
   const uid = useUserUID()
+  const { palette } = useTheme()
   const { data } = useDocument({ path: `rooms/${roomId}` })
   const { updateDocument } = useDocumentUtils({ path: `rooms/${roomId}` })
   const { navigate } = useNavigation()
   const [isClosed, setClosed] = useState(false)
+
   const { data: adminData, loading } = useDocument({
     path: `users/${data?.adminUser}`,
   })
@@ -51,218 +60,273 @@ export const RoomDetails = ({ route, navigation }): ReactElement => {
       return user.fee
     }
   })
+  const [inputValue, setInputValue] = useState(myFee)
+  const handleNumberChange = (value: string) => {
+    setInputValue(value)
+  }
   const calculateResult = () => {
     const paidUsers = data?.users?.filter((user) => {
       return user.isPaid
     })
     return parseInt((paidUsers.length * 100) / data?.users.length)
   }
-  console.log()
+
   const closeTheRoom = async () => {
     await updateDocument({ isActive: !data?.isActive })
     setClosed(true)
+  }
+  const pay = async () => {
+    const userIndex = data.users.findIndex((el) => el.id === uid)
+    const newUsers = data.users
+    newUsers[userIndex].isPaid = true
+
+    await updateDocument({ users: newUsers })
+      .then(() => {
+        console.log('done')
+        setVisibleModal(false)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   }
   return (
     <SafeAreaScreen>
       <BasicScreen>
         <View>
-          <Spacer size={5} horizontal={true} />
-          <Toggle
-            tabOneComponent={
-              <View style={{ width: '100%' }}>
-                {data?.adminUser === uid && !data?.isCalculated && (
-                  <TouchableOpacity
-                    onPress={() =>
-                      navigate(NavigationRoutes.ScanBillScreen, {
-                        roomId,
-                      })
-                    }
-                  >
-                    <View style={styles.card}>
-                      <View style={styles.container}>
-                        <View style={{ width: '100%' }}>
-                          <View style={styles.infoContainer}>
-                            <Spacer size={8} horizontal={true} />
-                            <InvoiceIcon />
-                            <Spacer size={5} horizontal={true} />
-                            <Text style={styles.number}>Баримт оруулах</Text>
-                            <Spacer size={8} horizontal={true} />
+          <View>
+            <Toggle
+              tabOneComponent={
+                <View style={{ width: '100%' }}>
+                  {data?.adminUser === uid && !data?.isCalculated && (
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigate(NavigationRoutes.ScanBillScreen, {
+                          roomId,
+                        })
+                      }
+                    >
+                      <View style={styles.card}>
+                        <View style={styles.container}>
+                          <View style={{ width: '100%' }}>
+                            <View style={styles.infoContainer}>
+                              <Spacer size={8} horizontal={true} />
+                              <InvoiceIcon />
+                              <Spacer size={5} horizontal={true} />
+                              <Text style={styles.number}>Баримт оруулах</Text>
+                              <Spacer size={8} horizontal={true} />
+                            </View>
                           </View>
                         </View>
                       </View>
-                    </View>
-                  </TouchableOpacity>
-                )}
-                {data?.splitOption === 'equally' ? (
-                  <Stack size={5} justifyContent="space-around" height="100%">
-                    <Stack size={3}>
+                    </TouchableOpacity>
+                  )}
+                  {data?.splitOption === 'equally' ? (
+                    <Stack size={5} justifyContent="space-around">
+                      <Stack size={3}>
+                        <Queue
+                          size={5}
+                          justifyContent="flex-start"
+                          alignItems="center"
+                        >
+                          <EquallyIcon />
+                          <Text style={{ fontSize: 17 }}> Тэнцүү хуваалт</Text>
+                        </Queue>
+                        <View style={styles.divider} />
+                      </Stack>
+                      {data?.adminUser === uid ? (
+                        <View
+                          style={{
+                            width: '100%',
+                            borderColor: '#D5DDE5',
+                            borderWidth: 1,
+                            padding: 20,
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                          }}
+                        >
+                          <View>
+                            <Text
+                              style={{
+                                fontWeight: 'bold',
+                                fontSize: 16,
+                                marginBottom: 5,
+                              }}
+                            >
+                              Нийт: {data?.total}₮
+                            </Text>
+                            <Text style={{ color: '#027A48', fontSize: 16 }}>
+                              Биелэлт: {calculateResult()}/100%
+                            </Text>
+                          </View>
+                          <Pressable
+                            onPress={() => closeTheRoom()}
+                            style={{
+                              width: 90,
+                              height: 40,
+                              borderRadius: 10,
+                              backgroundColor: '#027A48',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                            }}
+                          >
+                            <Text style={{ color: 'white' }}>
+                              {data?.isActive ? 'Өрөөг хаах' : 'Өрөөг нээх'}
+                            </Text>
+                          </Pressable>
+                        </View>
+                      ) : (
+                        <View
+                          style={{
+                            width: '100%',
+                            borderColor: '#D5DDE5',
+                            borderWidth: 1,
+                            padding: 20,
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                          }}
+                        >
+                          <View>
+                            <Text
+                              style={{
+                                fontWeight: 'bold',
+                                fontSize: 16,
+                                marginBottom: 5,
+                              }}
+                            >
+                              Миний төлөх: {myFee} ₮
+                            </Text>
+                          </View>
+                          <Pressable
+                            onPress={() => setVisibleModal(true)}
+                            style={{
+                              width: 90,
+                              height: 40,
+                              borderRadius: 10,
+                              backgroundColor: '#027A48',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                            }}
+                          >
+                            <Text style={{ color: 'white' }}>Хуримтлал</Text>
+                          </Pressable>
+                        </View>
+                      )}
                       <Queue
-                        size={5}
-                        justifyContent="flex-start"
                         alignItems="center"
+                        justifyContent="center"
+                        width="100%"
+                        role={palette.secondary}
+                        padding={8}
                       >
-                        <EquallyIcon />
-                        <Text style={{ fontSize: 17 }}> Тэцүү хуваалт</Text>
+                        <Input
+                          autoCapitalize="none"
+                          placeholder="Төлөх дүн"
+                          width="80%"
+                          role={palette.background.default}
+                          keyboardType="number-pad"
+                          onChangeText={handleNumberChange}
+                          value={inputValue}
+                          inputStyle={{
+                            fontSize: 25,
+                            fontWeight: '700',
+                            textAlign: 'right',
+                          }}
+                          defaultValue={'0'}
+                        />
+                        <Pressable onPress={() => setVisibleModal(true)}>
+                          <AddIcon color="white" />
+                        </Pressable>
                       </Queue>
-                      <View style={styles.divider} />
+                      <View style={{ width: '100%' }}>
+                        {users.map((element, index) => {
+                          return (
+                            <Contact
+                              roomDetail={element}
+                              roomId={roomId}
+                              key={index}
+                            />
+                          )
+                        })}
+                      </View>
                     </Stack>
-                    <View style={{ width: '100%' }}>
+                  ) : (
+                    <View>
+                      <Text>Авсанаа</Text>
+                    </View>
+                  )}
+                </View>
+              }
+              tabOneText="Тооцоо"
+              tabTwoComponent={
+                <View style={{ width: '100%' }}>
+                  {users && (
+                    <>
+                      <Text>Гишүүд</Text>
                       {users.map((element, index) => {
-                        console.log(element)
                         return (
-                          <Contact
-                            roomDetail={element}
-                            roomId={roomId}
-                            key={index}
-                          />
+                          <Contact roomDetail={element} key={index} readOnly />
                         )
                       })}
+                    </>
+                  )}
+                </View>
+              }
+              tabTwoText="Гишүүд"
+            />
+
+            <Modal
+              color={theme.palette.primary.main}
+              singleButton={true}
+              singleButtonText="За"
+              title="Амжилттай"
+              setIsVisible={setClosed}
+              isVisible={isClosed}
+              onSingleButton={() => {
+                navigate(NavigationRoutes.HomeScreen)
+              }}
+            />
+            {isVisibleModal && (
+              <View
+                style={[
+                  styles.popup,
+                  { height: windowHeight * 0.8, width: windowWidth },
+                ]}
+              >
+                <Stack size={5} alignItems="center">
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      color: '#000',
+                      marginBottom: 20,
+                      textAlign: 'center',
+                    }}
+                  >
+                    Та илүү төлөх гэж байна. Энэ нь хуримтлалруу орно.
+                  </Text>
+                  <TouchableOpacity onPress={() => copyToClipboard()}>
+                    <Text>Хуримтлал: {adminData?.bankName}</Text>
+                  </TouchableOpacity>
+                  <Text>Дансны дугаар: {adminData?.accountNumber}</Text>
+                  <Text>Эзэмшигч: {adminData?.owner}</Text>
+                  <Queue size={15}>
+                    <View style={{ width: 120 }}>
+                      <Button
+                        type="secondary"
+                        onPress={() => void setVisibleModal(false)}
+                      >
+                        Буцах
+                      </Button>
                     </View>
-
-                    {data?.adminUser === uid ? (
-                      <View
-                        style={{
-                          width: '100%',
-                          borderColor: '#D5DDE5',
-                          borderWidth: 1,
-                          padding: 20,
-                          flexDirection: 'row',
-                          justifyContent: 'space-between',
-                        }}
-                      >
-                        <View>
-                          <Text
-                            style={{
-                              fontWeight: 'bold',
-                              fontSize: 16,
-                              marginBottom: 5,
-                            }}
-                          >
-                            Нийт: {data?.total}₮
-                          </Text>
-                          <Text style={{ color: '#027A48', fontSize: 16 }}>
-                            Биелэлт: {calculateResult()}/100%
-                          </Text>
-                        </View>
-                        <Pressable
-                          onPress={() => closeTheRoom()}
-                          style={{
-                            width: 90,
-                            height: 40,
-                            borderRadius: 10,
-                            backgroundColor: '#027A48',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}
-                        >
-                          <Text style={{ color: 'white' }}>
-                            {data?.isActive ? 'Өрөөг хаах' : 'Өрөөг нээх'}
-                          </Text>
-                        </Pressable>
-                      </View>
-                    ) : (
-                      <View
-                        style={{
-                          width: '100%',
-                          borderColor: '#D5DDE5',
-                          borderWidth: 1,
-                          padding: 20,
-                          flexDirection: 'row',
-                          justifyContent: 'space-between',
-                        }}
-                      >
-                        <View>
-                          <Text
-                            style={{
-                              fontWeight: 'bold',
-                              fontSize: 16,
-                              marginBottom: 5,
-                            }}
-                          >
-                            Миний төлөх: {myFee} ₮
-                          </Text>
-                        </View>
-                        <Pressable
-                          onPress={() => setVisibleModal(true)}
-                          style={{
-                            width: 90,
-                            height: 40,
-                            borderRadius: 10,
-                            backgroundColor: '#027A48',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}
-                        >
-                          <Text style={{ color: 'white' }}>Данс харах</Text>
-                        </Pressable>
-                      </View>
-                    )}
-                  </Stack>
-                ) : (
-                  <View>
-                    <Text>Авсанаа</Text>
-                  </View>
-                )}
+                    <View style={{ width: 120 }}>
+                      <Button type="primary" onPress={() => void pay()}>
+                        Тэгье
+                      </Button>
+                    </View>
+                  </Queue>
+                </Stack>
               </View>
-            }
-            tabOneText="Тооцоо"
-            tabTwoComponent={
-              <View style={{ width: '100%' }}>
-                {users && (
-                  <>
-                    <Text>Гишүүд</Text>
-                    {users.map((element, index) => {
-                      return (
-                        <Contact roomDetail={element} key={index} readOnly />
-                      )
-                    })}
-                  </>
-                )}
-              </View>
-            }
-            tabTwoText="Гишүүд"
-          />
-
-          <Modal
-            color={theme.palette.primary.main}
-            singleButton={true}
-            singleButtonText="За"
-            title="Амжилттай"
-            setIsVisible={setClosed}
-            isVisible={isClosed}
-            onSingleButton={() => {
-              navigate(NavigationRoutes.HomeScreen)
-            }}
-          />
-          {isVisibleModal && (
-            <View
-              style={[
-                styles.popup,
-                { height: windowHeight * 0.8, width: windowWidth },
-              ]}
-            >
-              <Stack size={5} alignItems="center">
-                <Text style={{ fontSize: 20, color: '#000', marginBottom: 20 }}>
-                  Дансны мэдээлэл явуулах
-                </Text>
-                <TouchableOpacity onPress={() => copyToClipboard()}>
-                  <Text>Банкны нэр: {adminData?.bankName}</Text>
-                </TouchableOpacity>
-                <Text>Дансны дугаар: {adminData?.accountNumber}</Text>
-                <Text>Эзэмшигч: {adminData?.owner}</Text>
-                <Queue size={15}>
-                  <View style={{ width: 120 }}>
-                    <Button
-                      type="secondary"
-                      onPress={() => void setVisibleModal(false)}
-                    >
-                      Буцах
-                    </Button>
-                  </View>
-                </Queue>
-              </Stack>
-            </View>
-          )}
+            )}
+          </View>
         </View>
       </BasicScreen>
     </SafeAreaScreen>

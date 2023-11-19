@@ -13,7 +13,7 @@ import { Modal } from '../components/core/Modal'
 import { NavigationRoutes } from '../navigation/NavigationParameter'
 import { useTheme } from '../providers'
 import { CloseIcon, CorrectIcon } from '../assets/HomeIcons'
-import { useCollectionUtils, useDocumentUtils } from '../hooks'
+import { useCollection, useCollectionUtils, useDocumentUtils } from '../hooks'
 import { useNavigation, useScrollToTop } from '@react-navigation/native'
 import { Input } from '../components/Input'
 import Contact from '../components/Contact'
@@ -46,7 +46,9 @@ export const CreateRoomScreen = (): JSX.Element => {
   const [bankName, setBankName] = useState(userData?.bankName)
   const [accountNumber, setAccountNumber] = useState(userData?.accountNumber)
   const [owner, setOwner] = useState(userData?.owner)
-
+  const { data: allUsersData } = useCollection({
+    path: 'users',
+  })
   const uid = useUserUID()
   const [roomId, setRoomId] = useState('')
   const ref = React.useRef(null)
@@ -94,7 +96,7 @@ export const CreateRoomScreen = (): JSX.Element => {
         roomName: roomName,
         isActive: true,
         users: activeRoomMembers.map((item) => {
-          return { phoneNumber: item }
+          return { phoneNumber: item.phoneNumber, nickName: item.nickName }
         }),
       })
       setRoomId(id)
@@ -185,13 +187,13 @@ export const CreateRoomScreen = (): JSX.Element => {
               {activeRoomMembers?.map((member, index) => {
                 return (
                   <View style={styles.memberLabel} key={index}>
-                    <Text>{member}</Text>
+                    <Text>{member.phoneNumber}</Text>
                     <Spacer horizontal={false} size={3} />
                     <TouchableOpacity
                       onPress={() => {
                         setActiveRoomMembers((prev) =>
-                          _.remove(prev, (number) => {
-                            return number != member
+                          _.remove(prev, (item) => {
+                            return item.phoneNumber !== member.phoneNumber
                           }),
                         )
                       }}
@@ -217,8 +219,19 @@ export const CreateRoomScreen = (): JSX.Element => {
               <Pressable
                 onPress={() => {
                   if (inputValue) {
-                    setActiveRoomMembers((prev) => [...prev, inputValue])
-                    setInputValue('')
+                    const findedUser = allUsersData.filter(
+                      (user) => user.phoneNumber === inputValue,
+                    )
+                    if (findedUser.length !== 0) {
+                      setActiveRoomMembers((prev) => [
+                        ...prev,
+                        {
+                          phoneNumber: inputValue,
+                          nickName: findedUser[0].nickName,
+                        },
+                      ])
+                      setInputValue('')
+                    }
                   }
                 }}
               >
@@ -281,12 +294,12 @@ export const CreateRoomScreen = (): JSX.Element => {
           >
             <Stack size={5} alignItems="center">
               <Text style={{ fontSize: 20, color: '#000', marginBottom: 20 }}>
-                Дансны мэдээлэл явуулах
+                Хуримтлал үүсгэх үү?
               </Text>
 
               <View style={styles.modalDivider}></View>
 
-              <Input
+              {/* <Input
                 autoCapitalize="none"
                 placeholder="Банкны нэр"
                 width="80%"
@@ -294,7 +307,7 @@ export const CreateRoomScreen = (): JSX.Element => {
                 keyboardType="default"
                 value={bankName}
                 onChangeText={handleChangeBankName}
-              />
+              /> */}
               <Input
                 autoCapitalize="none"
                 placeholder="Дансны дугаар"
@@ -313,6 +326,10 @@ export const CreateRoomScreen = (): JSX.Element => {
                 value={owner}
                 onChangeText={handleChangeOwner}
               />
+              <Text style={{ textAlign: 'center', padding: 10 }}>
+                Ингэснээр хүмүүст энэ дансны чинь боловсруулсан хуулга харагдана
+                шүү
+              </Text>
               <Queue size={15}>
                 <View style={{ width: 120 }}>
                   <Button

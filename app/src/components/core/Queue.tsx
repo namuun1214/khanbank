@@ -5,6 +5,7 @@ type QueueType = {
   size?: number
   role?: string
   children: any
+  otherStyle?: any
   justifyContent?:
     | 'flex-start'
     | 'space-between'
@@ -15,15 +16,24 @@ type QueueType = {
   alignItems?: 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline'
   height?: number | string
   width?: number | string
+  padding?: number
 }
 export const Queue: FC<QueueType> = (props) => {
-  const { size = 0, children, role, justifyContent, alignItems } = props
+  const {
+    size = 0,
+    children,
+    role,
+    justifyContent,
+    alignItems,
+    padding,
+  } = props
   const style = StyleSheet.create({
     container: {
       flexDirection: 'row',
       backgroundColor: role,
       justifyContent,
       alignItems,
+      padding: padding,
     },
   })
   return (

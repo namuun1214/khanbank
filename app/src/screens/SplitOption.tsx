@@ -218,7 +218,7 @@ export const SplitOptionScreen = ({ route }: any): JSX.Element => {
                           }}
                         >
                           <Text style={{ fontWeight: 'bold' }}>
-                            {user?.name}
+                            {user?.nickName}
                           </Text>
                           <Text>{user.phoneNumber}</Text>
                         </View>

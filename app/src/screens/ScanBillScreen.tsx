@@ -156,6 +156,10 @@ export const ScanBillScreen = ({ route }: any): JSX.Element => {
                       total: total,
                       roomId: roomId,
                     })
+                    console.log({
+                      total: total,
+                      roomId: roomId,
+                    })
                   } else {
                     setError(true)
                   }

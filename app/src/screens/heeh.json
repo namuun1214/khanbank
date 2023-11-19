@@ -1,0 +1,22 @@
+{
+    "accountNumber": "60606006",
+    "bankName": "Khaan",
+    "id": "ojsF5u1mIWggikkuyE53lRDsAoJ3",
+    "notificationToken": "dk3fjuaPeUxRtgx_G5Y-3S:APA91bGJzMPi6KKEjq0zfuyzG6k1p-FwtwND-BQpRsaNRRlRGN4neJyWw37vPy8U0HXdNVMTqcxtIiglBx9RFwLE1FUmLYt38a-J4A1-l0uuYV-qx4I78yYx3hHnSiVq3TRrPOXxY84b",
+    "owner": "nama",
+    "phoneNumber": "99112233",
+    "rooms": [
+        {
+            "id": "w3B5FNnSxqFT4NvP69FZ",
+            "status": "accepted"
+        },
+        {
+            "id": "dhZsVeY8vuQaA2v5tsh7",
+            "status": "accepted"
+        }
+    ],
+    "updatedAt": {
+        "nanoseconds": 636000000,
+        "seconds": 1700414741
+    }
+}

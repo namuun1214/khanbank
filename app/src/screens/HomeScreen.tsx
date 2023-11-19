@@ -274,7 +274,7 @@ export const HomeScreen = (): JSX.Element => {
             <Toggle
               tabOneComponent={<ActiveRooms />}
               tabOneText="Өрөөнүүд"
-              tabTwoComponent={<History />}
+              tabTwoComponent={<ActiveRooms />}
               tabTwoText="Түүх"
             />
           </Stack>
