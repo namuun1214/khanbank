@@ -12,6 +12,7 @@ export enum NavigationRoutes {
   NotificationScreen = 'Мэдэгдэл',
   SplitOptionScreen = 'Хуваах',
   ShakeScreen = 'Сэгсрэх',
+  PayScreen = 'Төлбөрөө төлөх',
 }
 export interface NavigationPayload<T> {
   props: T
@@ -30,4 +31,5 @@ export type NavigatorParameterList = {
   [NavigationRoutes.NotificationScreen]: NavigationPayload<any>
   [NavigationRoutes.SplitOptionScreen]: NavigationPayload<any>
   [NavigationRoutes.ProfileScreen]: NavigationPayload<any>
+  [NavigationRoutes.PayScreen]: NavigationPayload<any>
 }

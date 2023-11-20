@@ -5,4 +5,5 @@ export * from "./HomeScreen";
 export * from "./SafeAreaScreen";
 export * from "./BillScreen";
 export * from "./SplitOption";
-export * from './ProfileScreen'
+export * from "./ProfileScreen";
+export * from "./PayScreen";

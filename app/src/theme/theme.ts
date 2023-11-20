@@ -22,7 +22,7 @@ export const theme: Theme = {
   palette: {
     primary: {
       main: "#027A48",
-      light: "#06C755",
+      light: "#027A48",
       dark: "#000000",
       contrastText: "#fff",
     },

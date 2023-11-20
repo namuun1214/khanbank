@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from 'react'
+import React, { ReactElement, useEffect, useState } from "react";
 import {
   Dimensions,
   Pressable,
@@ -8,39 +8,41 @@ import {
   View,
   Clipboard,
   KeyboardAvoidingView,
-} from 'react-native'
-import _ from 'lodash'
-import Contact from '../components/Contact'
-import { useNavigation } from '@react-navigation/native'
-import { NavigationRoutes } from '../navigation/NavigationParameter'
-import InvoiceIcon from '../assets/InvoiceIcon'
-import { Modal, Queue, Spacer, Stack } from '../components/core'
-import { BasicScreen } from './SafeAreaScreen'
-import { useUserUID } from '../authentication'
-import { useDocument, useDocumentUtils } from '../hooks'
-import { SafeAreaScreen } from '.'
-import { Toggle } from '../components/Toggle'
-import { AddIcon, EquallyIcon, RightArrowIcon } from '../assets'
-import { theme } from '../theme'
-import Button from '../components/Button'
-import { Input } from '../components/Input'
-import { useTheme } from '../providers'
-import { ScrollView, TextInput } from 'react-native-gesture-handler'
+} from "react-native";
+import _ from "lodash";
+
+import Contact from "../components/Contact";
+import { useNavigation } from "@react-navigation/native";
+import { NavigationRoutes } from "../navigation/NavigationParameter";
+import InvoiceIcon from "../assets/InvoiceIcon";
+import { Modal, Queue, Spacer, Stack } from "../components/core";
+import { BasicScreen } from "./SafeAreaScreen";
+import { useUserUID } from "../authentication";
+import { useDocument, useDocumentUtils } from "../hooks";
+import { SafeAreaScreen } from ".";
+import { Toggle } from "../components/Toggle";
+import { AddIcon, EquallyIcon, RightArrowIcon } from "../assets";
+import { theme } from "../theme";
+import Button from "../components/Button";
+import { Input } from "../components/Input";
+import { useTheme } from "../providers";
+import { ScrollView, TextInput } from "react-native-gesture-handler";
 import firestore, {
   FirebaseFirestoreTypes,
-} from '@react-native-firebase/firestore'
+} from "@react-native-firebase/firestore";
 
 export const RoomDetails = ({ route, navigation }): ReactElement => {
-  const { roomId, roomName, users, isActive } = route.params
-  const windowHeight = Dimensions.get('window').height
-  const windowWidth = Dimensions.get('window').width
-  const [isVisibleModal, setVisibleModal] = useState(false)
-  const uid = useUserUID()
-  const { palette } = useTheme()
-  const { data } = useDocument({ path: `rooms/${roomId}` })
-  const { updateDocument } = useDocumentUtils({ path: `rooms/${roomId}` })
-  const { navigate } = useNavigation()
-  const [isClosed, setClosed] = useState(false)
+  const { listData, roomId, roomName, users, isActive } = route.params;
+  const windowHeight = Dimensions.get("window").height;
+  const windowWidth = Dimensions.get("window").width;
+  const [isVisibleModal, setVisibleModal] = useState(false);
+  const uid = useUserUID();
+  const { palette } = useTheme();
+  const { data } = useDocument({ path: `rooms/${roomId}` });
+  const { updateDocument } = useDocumentUtils({ path: `rooms/${roomId}` });
+  const { navigate } = useNavigation();
+  const [isClosed, setClosed] = useState(false);
+  console.log(listData);
   // const [isOwnPaid, setOwnPaid] = useState(false)
   // useEffect(() => {
   //   // const userIndex = data?.users?.findIndex((el) => el.id === uid)
@@ -49,50 +51,50 @@ export const RoomDetails = ({ route, navigation }): ReactElement => {
   // }, [])
   const { data: adminData, loading } = useDocument({
     path: `users/${data?.adminUser}`,
-  })
-  const [copiedText, setCopiedText] = useState('')
+  });
+  const [copiedText, setCopiedText] = useState("");
 
   const copyToClipboard = () => {
-    Clipboard.setString('hello world')
-  }
+    Clipboard.setString("hello world");
+  };
 
   const fetchCopiedText = async () => {
-    const text = await Clipboard.getString()
-    setCopiedText(text)
-  }
+    const text = await Clipboard.getString();
+    setCopiedText(text);
+  };
   const myFee = data?.users?.map((user) => {
     if (user.id === uid) {
-      return user.fee
+      return user.fee;
     }
-  })
-  const [inputValue, setInputValue] = useState(myFee)
+  });
+  const [inputValue, setInputValue] = useState(myFee);
 
   const calculateResult = () => {
     const paidUsers = data?.users?.filter((user) => {
-      return user.isPaid
-    })
-    return parseInt((paidUsers.length * 100) / data?.users.length)
-  }
+      return user.isPaid;
+    });
+    return parseInt((paidUsers.length * 100) / data?.users.length);
+  };
 
   const closeTheRoom = async () => {
-    await updateDocument({ isActive: !data?.isActive })
-    setClosed(true)
-  }
+    await updateDocument({ isActive: !data?.isActive });
+    setClosed(true);
+  };
 
   const pay = async () => {
-    const userIndex = data.users.findIndex((el) => el.id === uid)
-    const newUsers = data.users
-    newUsers[userIndex].isPaid = true
+    const userIndex = data.users.findIndex((el) => el.id === uid);
+    const newUsers = data.users;
+    newUsers[userIndex].isPaid = true;
 
     await updateDocument({ users: newUsers })
       .then(() => {
-        console.log('done')
-        setVisibleModal(false)
+        console.log("done");
+        setVisibleModal(false);
       })
       .catch((error) => {
-        console.log(error)
-      })
-  }
+        console.log(error);
+      });
+  };
   return (
     <SafeAreaScreen>
       <BasicScreen>
@@ -100,7 +102,7 @@ export const RoomDetails = ({ route, navigation }): ReactElement => {
           <View>
             <Toggle
               tabOneComponent={
-                <View style={{ width: '100%' }}>
+                <View style={{ width: "100%" }}>
                   {data?.adminUser === uid && !data?.isCalculated && (
                     <TouchableOpacity
                       onPress={() =>
@@ -111,12 +113,21 @@ export const RoomDetails = ({ route, navigation }): ReactElement => {
                     >
                       <View style={styles.card}>
                         <View style={styles.container}>
-                          <View style={{ width: '100%' }}>
+                          <View style={{ width: "100%" }}>
                             <View style={styles.infoContainer}>
                               <Spacer size={8} horizontal={true} />
                               <InvoiceIcon />
                               <Spacer size={5} horizontal={true} />
-                              <Text style={styles.number}>Баримт оруулах</Text>
+                              <Text>Одоогоор тооцоо оруулаагүй байна</Text>
+                              <Spacer size={5} horizontal={true} />
+                              <Button
+                                type="primary"
+                                onPress={() =>
+                                  navigate(NavigationRoutes.ScanBillScreen)
+                                }
+                              >
+                                Тооцоо бодъё
+                              </Button>
                               <Spacer size={8} horizontal={true} />
                             </View>
                           </View>
@@ -124,7 +135,7 @@ export const RoomDetails = ({ route, navigation }): ReactElement => {
                       </View>
                     </TouchableOpacity>
                   )}
-                  {data?.splitOption === 'equally' ? (
+                  {data?.splitOption === "equally" ? (
                     <Stack size={5} justifyContent="space-around">
                       <Stack size={3}>
                         <Queue
@@ -140,25 +151,25 @@ export const RoomDetails = ({ route, navigation }): ReactElement => {
                       {data?.adminUser === uid ? (
                         <View
                           style={{
-                            width: '100%',
-                            borderColor: '#D5DDE5',
+                            width: "100%",
+                            borderColor: "#D5DDE5",
                             borderWidth: 1,
                             padding: 20,
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
+                            flexDirection: "row",
+                            justifyContent: "space-between",
                           }}
                         >
                           <View>
                             <Text
                               style={{
-                                fontWeight: 'bold',
+                                fontWeight: "bold",
                                 fontSize: 16,
                                 marginBottom: 5,
                               }}
                             >
                               Нийт: {data?.total}₮
                             </Text>
-                            <Text style={{ color: '#027A48', fontSize: 16 }}>
+                            <Text style={{ color: "#027A48", fontSize: 16 }}>
                               Биелэлт: {calculateResult()}/100%
                             </Text>
                           </View>
@@ -168,31 +179,31 @@ export const RoomDetails = ({ route, navigation }): ReactElement => {
                               width: 90,
                               height: 40,
                               borderRadius: 10,
-                              backgroundColor: '#027A48',
-                              justifyContent: 'center',
-                              alignItems: 'center',
+                              backgroundColor: "#027A48",
+                              justifyContent: "center",
+                              alignItems: "center",
                             }}
                           >
-                            <Text style={{ color: 'white' }}>
-                              {data?.isActive ? 'Өрөөг хаах' : 'Өрөөг нээх'}
+                            <Text style={{ color: "white" }}>
+                              {data?.isActive ? "Өрөөг хаах" : "Өрөөг нээх"}
                             </Text>
                           </Pressable>
                         </View>
                       ) : (
                         <View
                           style={{
-                            width: '100%',
-                            borderColor: '#D5DDE5',
+                            width: "100%",
+                            borderColor: "#D5DDE5",
                             borderWidth: 1,
                             padding: 20,
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
+                            flexDirection: "row",
+                            justifyContent: "space-between",
                           }}
                         >
                           <View>
                             <Text
                               style={{
-                                fontWeight: 'bold',
+                                fontWeight: "bold",
                                 fontSize: 16,
                                 marginBottom: 5,
                               }}
@@ -206,12 +217,12 @@ export const RoomDetails = ({ route, navigation }): ReactElement => {
                               width: 90,
                               height: 40,
                               borderRadius: 10,
-                              backgroundColor: '#027A48',
-                              justifyContent: 'center',
-                              alignItems: 'center',
+                              backgroundColor: "#027A48",
+                              justifyContent: "center",
+                              alignItems: "center",
                             }}
                           >
-                            <Text style={{ color: 'white' }}>Төлөх</Text>
+                            <Text style={{ color: "white" }}>Төлөх</Text>
                           </Pressable>
                         </View>
                       )}
@@ -222,8 +233,8 @@ export const RoomDetails = ({ route, navigation }): ReactElement => {
                       >
                         <View
                           style={{
-                            width: '100%',
-                            borderColor: 'red',
+                            width: "100%",
+                            borderColor: "red",
                             borderWidth: 2,
                             borderRadius: 5,
                             padding: 5,
@@ -232,7 +243,7 @@ export const RoomDetails = ({ route, navigation }): ReactElement => {
                           <Text>Холбосон данснууд</Text>
                         </View>
                       </Stack>
-                      <View style={{ width: '100%' }}>
+                      <View style={{ width: "100%" }}>
                         {users.map((element, index) => {
                           return (
                             <Contact
@@ -240,27 +251,49 @@ export const RoomDetails = ({ route, navigation }): ReactElement => {
                               roomId={roomId}
                               key={index}
                             />
-                          )
+                          );
                         })}
                       </View>
                     </Stack>
                   ) : (
-                    <View>
-                      <Text>Авсанаа</Text>
+                    <View
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      {/* {listData?.map((e: any) => {
+                        return (
+                          <View
+                            style={{ display: "flex", flexDirection: "column", width: 500, height: 50 }}
+                          >
+                            <View style={{display: "flex", justifyContent: "space-between"}}>
+                              <Text>Amount:</Text>
+                              <Text>{e.amount}</Text>
+                            </View>
+                            <View>
+                              <Text>Name:</Text>
+                              <Text>{e.name}</Text>
+                            </View>
+                          </View>
+                        );
+                      })} */}
                     </View>
                   )}
                 </View>
               }
               tabOneText="Тооцоо"
               tabTwoComponent={
-                <View style={{ width: '100%' }}>
+                <View style={{ width: "100%" }}>
                   {users && (
                     <>
                       <Text>Гишүүд</Text>
                       {users.map((element, index) => {
                         return (
                           <Contact roomDetail={element} key={index} readOnly />
-                        )
+                        );
                       })}
                     </>
                   )}
@@ -277,7 +310,7 @@ export const RoomDetails = ({ route, navigation }): ReactElement => {
               setIsVisible={setClosed}
               isVisible={isClosed}
               onSingleButton={() => {
-                navigate(NavigationRoutes.HomeScreen)
+                navigate(NavigationRoutes.HomeScreen);
               }}
             />
             {isVisibleModal && (
@@ -291,9 +324,9 @@ export const RoomDetails = ({ route, navigation }): ReactElement => {
                   <Text
                     style={{
                       fontSize: 20,
-                      color: '#000',
+                      color: "#000",
                       marginBottom: 20,
-                      textAlign: 'center',
+                      textAlign: "center",
                     }}
                   >
                     Төлбөр амжилттай төлөгдлөө
@@ -309,9 +342,9 @@ export const RoomDetails = ({ route, navigation }): ReactElement => {
                     <Button
                       type="primary"
                       onPress={() => {
-                        void pay()
-                        setVisibleModal(false)
-                        navigate(NavigationRoutes.HomeScreen)
+                        void pay();
+                        setVisibleModal(false);
+                        navigate(NavigationRoutes.HomeScreen);
                       }}
                     >
                       OK
@@ -331,38 +364,38 @@ export const RoomDetails = ({ route, navigation }): ReactElement => {
         </View>
       </BasicScreen>
     </SafeAreaScreen>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   number: {
     fontSize: 16,
-    fontWeight: '400',
+    fontWeight: "400",
     flex: 1,
-    color: '#027A48',
+    color: "#027A48",
     marginHorizontal: 4,
   },
   infoContainer: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
   },
   card: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 16,
-    borderStyle: 'dashed',
+    borderStyle: "dashed",
     borderWidth: 1,
-    borderColor: '#027A48',
+    borderColor: "#027A48",
     paddingVertical: 12,
     paddingHorizontal: 16,
     marginVertical: 10,
-    display: 'flex',
-    flexDirection: 'row',
-    shadowColor: '#000',
+    display: "flex",
+    flexDirection: "row",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 1,
@@ -373,27 +406,27 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     flex: 1 / 4,
-    transform: [{ rotateY: '180deg' }],
-    justifyContent: 'center',
+    transform: [{ rotateY: "180deg" }],
+    justifyContent: "center",
   },
   divider: {
-    width: '100%',
+    width: "100%",
     height: 2,
     backgroundColor: theme.palette.primary.main,
   },
   popup: {
-    position: 'absolute',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    position: "absolute",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     backgroundColor: theme.palette.background.default,
-    width: '100%',
+    width: "100%",
     marginTop: 20,
   },
   closeIconContainer: {
     padding: 10,
-    position: 'absolute',
+    position: "absolute",
     right: 5,
     top: 5,
   },
-})
+});

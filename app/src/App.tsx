@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { AuthProvider } from './authentication'
 import { RootStack } from './navigation'
 import { PermissionProvider, UserProvider } from './providers'
+console.disableYellowBox = true;
 import { View, PanResponder, NativeModules } from 'react-native'
 
 // const DevMenuTrigger = ({ children }) => {

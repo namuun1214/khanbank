@@ -10,7 +10,7 @@ import { Pressable } from 'react-native'
 import { ChevronLeft, HeaderBack, NotificationIcon } from '../../assets'
 import { RoomDetails } from '../../screens/RoomDetail'
 import { theme } from '../../theme'
-import { BillScreen, SplitOptionScreen } from '../../screens'
+import { BillScreen, PayScreen, SplitOptionScreen } from '../../screens'
 import { ScanBillScreen } from '../../screens/ScanBillScreen'
 import ShakeScreen from '../../screens/ShakeScreen'
 import { NotificationScreen } from '../../screens/NotificationScreen'
@@ -174,6 +174,26 @@ export const RootStack: FC = () => {
       <Stack.Screen
         name={NavigationRoutes.NotificationScreen}
         component={NotificationScreen}
+        options={{
+          headerStyle: {
+            backgroundColor: palette.primary.main,
+          },
+          headerTintColor: palette.primary.contrastText,
+          headerLeft: () => (
+            <Pressable
+              onPress={() => {
+                navigation.goBack()
+              }}
+              style={{ marginLeft: 10 }}
+            >
+              <HeaderBack />
+            </Pressable>
+          ),
+        }}
+      />
+      <Stack.Screen
+        name={NavigationRoutes.PayScreen}
+        component={PayScreen}
         options={{
           headerStyle: {
             backgroundColor: palette.primary.main,

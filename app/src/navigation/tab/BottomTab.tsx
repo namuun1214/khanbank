@@ -14,6 +14,7 @@ import CreateRoomIcon from '../../assets/CreateRoomIcon'
 import ProfileScreenIcon from '../../assets/ProfileScreenIcon'
 import { ProfileScreen } from '../../screens'
 import { useNavigation } from '@react-navigation/native'
+import { PayScreen } from '../../screens/payScreen/PayScreen'
 
 const Tab = createBottomTabNavigator<NavigatorParameterList>()
 
